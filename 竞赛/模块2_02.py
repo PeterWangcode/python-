@@ -1,3 +1,10 @@
+"""
+1. 构建函数 wordTfidf()，对商品中除停用词外的关键词，计算其TF-IDF值
+2. 返回文本中 TF-IDF 最大的前5个关键词，返回结果为 list 数据类型
+3. 只保留词性为 n、nr、ns 的关键词
+4. 下方给出的文本编码为UTF-8
+"""
+
 import jieba
 from jieba import analyse
 import requests

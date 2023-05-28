@@ -1,3 +1,10 @@
+"""
+1. 函数接收str数据类型的微信公众号名称name
+2. 函数返回为英文字符“YES”或“NO”，返回参数为str数据类型
+3. 不得修改函数weixinData()的名称
+4. 题目所需网站链接已经在下方给出，编码方式为UTF-8
+"""
+
 import requests
 from bs4 import BeautifulSoup
 import re
