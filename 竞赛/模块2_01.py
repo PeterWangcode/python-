@@ -1,50 +1,37 @@
 """
-1. 函数接收str数据类型的微信公众号名称name
-2. 函数返回为英文字符“YES”或“NO”，返回参数为str数据类型
-3. 不得修改函数weixinData()的名称
-4. 题目所需网站链接已经在下方给出，编码方式为UTF-8
+- 任务详情
+	给定一个由表格构成的网页，返回指定位置中的数字，数字类型要转换为 int 类型。
+	后台给出指定位置，位置由行（row）和列（col）构成，如 row = 2, col = 1, 表示第二行第一列，对应的数字是 249；
+	程序返回的数字必须是 int 类型，类型不正确将导致结果不正确；
+	后台给出的所有的位置都在表格中，无需考虑边界情况；
+	表格的第一行是列名，由 A-Z 构成，共 26 列；第一列是行索引，由 1-30 构成，共 30 行。
+- 任务要求
+	程序给出 int 类型的参数 row 和 col；
+	程序返回参数是 int 类型。
+- 测试用例
+	输入：row=29, col=20
+	输出：252
+	解释：表格第 29 行第 20 列中的数字是 252
 """
 
 import requests
 from bs4 import BeautifulSoup
-import re
+
 
 class Solution:
-	def weixinData(self, name: str) -> str:
-		url = 'http://72.itmc.org.cn/JS001/open/show/weixindata.html'
-		respnose = requests.get(url)
-		respnose.encoding = 'utf-8'
-		soup = BeautifulSoup(respnose.text, "html.parser")
-		elements = soup.tbody.find_all("tr")
 
-		information_list = []
-		for element in elements:
-			dct = {}
-			name_ = element.find("span", {'class': 'js-rank-detail-btn'}).get_text()  # 公众号名称
-			top_line = element.find_all('td')[4].get_text()  # 头条平均阅读数
-			original_read = element.find_all('td')[7].get_text()  # 原创平均阅读
-			fans_number = element.find_all('td')[3].get_text()  # 预估活跃粉丝
+    def table_num(self, row: int, col: int) -> int:
+    	url = r'http://72.itmc.org.cn/JS001/open/show/random-num/index.html'
+    	reasponse = requests.get(url)
+    	reasponse.encoding = 'UTF-8'
 
-			dct = {
-					"公众号名称": name_,
-					"头条平均阅读数": top_line,
-					"原创平均阅读": original_read,
-					"预估活跃粉丝": fans_number
-					}
+    	soup = BeautifulSoup(reasponse.text, 'lxml')
+    	elements = soup.select(
+    		f'body > table > tbody:nth-child(2) > tr:nth-child({row}) > td:nth-child({col + 1})'
+    		)
+    	print(elements[0].text)
 
-			information_list.append(dct)
-
-		# 遍历列表，对比公众号名称
-		for data in information_list:
-			if data.get("公众号名称") == name:
-				top_line = data.get("头条平均阅读数").replace("万+", "0000")
-				original_read = data.get("原创平均阅读").replace("万+", "0000")
-				fans_number = data.get("预估活跃粉丝").replace("万", "")
-				# 查看该公众号是否满足要求
-				if float(top_line) > 90000 and float(original_read) > 80000 and float(fans_number) < 300:
-					return "Yes"
-				else:
-					return "No"
+    	pass
 
 
-print(Solution().weixinData("广东共青团"))
+Solution().table_num(10, 11)
